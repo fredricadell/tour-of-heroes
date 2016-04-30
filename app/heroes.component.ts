@@ -1,4 +1,6 @@
 import {Component, OnInit} from 'angular2/core';
+import {Router} from 'angular2/router';
+
 import {Hero} from './hero';
 import {HeroDetailComponent} from './hero.detail.component';
 import {HeroService} from './hero.service';
@@ -7,15 +9,17 @@ import {HeroService} from './hero.service';
     selector: 'my-heroes',
     templateUrl: 'app/heroes.component.html',
     styleUrls: ['app/heroes.component.css'],
-    directives: [HeroDetailComponent],
-    providers: [HeroService]
+    directives: [HeroDetailComponent]
 })
 export class HeroesComponent implements OnInit {
-     constructor(private _heroService: HeroService) {
-    }
+
     private heroes: Hero[];
     selectedHero: Hero;
-    title = 'Tour of Heroes';
+
+    constructor(
+        private _heroService: HeroService,
+        private _router: Router) {
+    }
 
     getHeroes(isSlow: boolean){
         if (isSlow) {
@@ -28,7 +32,12 @@ export class HeroesComponent implements OnInit {
     onSelect(hero: Hero) {
         this.selectedHero = hero;
     }
-       ngOnInit() {
+
+    ngOnInit() {
         this.getHeroes(false);
+    }
+
+    gotoDetail() {
+        this._router.navigate(['HeroDetail', { id: this.selectedHero.id }]);
     }
 }
